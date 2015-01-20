@@ -295,6 +295,10 @@ class User
 end
 
 trip_planner = TripPlanner.new
+<<<<<<< HEAD
 trip_planner.plan
 
 Pry.start(binding)
+=======
+trip_planner.start
+>>>>>>> af4c43786b24e1f6cb26834c0b74cd26e663ac47
