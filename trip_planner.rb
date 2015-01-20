@@ -12,7 +12,7 @@ class TripPlanner
   
   def plan
 
-    @user = self.create_user
+    @user = create_user
     @forecast = self.retrieve_forecast
     @recommendation = self.create_recommendation
 
@@ -69,18 +69,23 @@ class TripPlanner
       @duration = gets.chomp.to_i
         
       @user = User.new(name, destination, duration)
-    # provide the interface asking for name, destination and duration
-    # then, create and store the User object
+  
   end
   
   def call_api
      units = "imperial"
      options = "daily?q=#{CGI::escape(@user.destination)}&mode=json&units=#{units}&cnt=#{@user.duration}"
-     @url = "http://api.openweathermap.org/data/2.5/forecast/#{options}"
-     @api_result = HTTParty.get(@url)
+      url = "http://api.openweathermap.org/data/2.5/forecast/#{options}"
+     @api_result = HTTParty.get(url)
+
+     @api_result.is_a?(Hash) ? @api_result : JSON.parse(@api_result)
   end
 
   def parse_result
+
+    # return nil if @api_result["cod"] = "404"
+
+    # stripped_results = 
     
     if @api_result["cod"] == "200"
       @forecast = []
@@ -283,7 +288,9 @@ class User
     @destination = destination
     @duration = duration
   end
-
+   def to_s
+    puts "#{@name} is going to #{@destination} for #{@duration} days"
+  end
   
 end
 
